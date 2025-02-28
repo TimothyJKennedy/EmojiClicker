@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Emoji App</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .emoji {
+            font-size: 2rem;
+            position: absolute;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        document.body.addEventListener('click', function(event) {
+            const emoji = document.createElement('div');
+            emoji.classList.add('emoji');
+            emoji.textContent = '😊';  // The smiley emoji
+            emoji.style.left = `${event.clientX - 15}px`;  // Position based on click location
+            emoji.style.top = `${event.clientY - 15}px`;   // Position based on click location
+            document.body.appendChild(emoji);
+
+            // Optional: Remove the emoji after 2 seconds
+            setTimeout(() => {
+                emoji.remove();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
