@@ -14,6 +14,11 @@
             background-color: #f0f0f0;
             overflow: hidden;
             font-family: Arial, sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: #222;
         }
 
         .emoji {
@@ -21,22 +26,113 @@
             position: absolute;
             user-select: none;
         }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            padding: 8px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .dark-mode .dark-mode-toggle {
+            background: #333;
+            color: #fff;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
     </style>
 </head>
 <body>
+    <div class="dark-mode-toggle">
+        <span>🌞</span>
+        <label class="switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider"></span>
+        </label>
+        <span>🌙</span>
+    </div>
+
     <script>
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+        }
+
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        // Emoji placement functionality
         document.body.addEventListener('click', function(event) {
+            // Don't place emoji if clicking the dark mode toggle
+            if (event.target.closest('.dark-mode-toggle')) return;
+
             const emoji = document.createElement('div');
             emoji.classList.add('emoji');
             emoji.textContent = '😊';  // The smiley emoji
             emoji.style.left = `${event.clientX - 15}px`;  // Position based on click location
             emoji.style.top = `${event.clientY - 15}px`;   // Position based on click location
             document.body.appendChild(emoji);
-
-            // Optional: Remove the emoji after 2 seconds
-            setTimeout(() => {
-                emoji.remove();
-            }, 2000);
         });
     </script>
 </body>
